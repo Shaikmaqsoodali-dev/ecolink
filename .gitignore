@@ -1,0 +1,8 @@
+# OS / editor junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.log
+
+# dependencies (none used today — plain Node, no npm install)
+node_modules/
