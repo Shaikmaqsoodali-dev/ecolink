@@ -1,28 +1,22 @@
 import { page } from '../layout.mjs';
 import { routes } from '../data.mjs';
-import { arrowRight } from '../ui.mjs';
+import { ic, kicker } from '../ui.mjs';
 
-export const notFound = () => {
-  const body = `
-<section class="section notfound">
-  <div class="container narrow">
-    <p class="eyebrow">404</p>
-    <h1 class="display reveal" data-split>This page went to landfill.</h1>
-    <p class="lead">The page you are looking for does not exist or has been moved.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="${routes.home}">Back to home${arrowRight()}</a>
-      <a class="btn btn-ghost" href="${routes.products}">View products</a>
-    </div>
+export const notFound = () =>
+  page({
+    title: 'Page not found | Ecolink India',
+    description: 'This page got recycled.',
+    current: routes.notFound,
+    darkTop: true,
+    noindex: true,
+    body: `<section class="nf">
+  <div class="nf-bg" aria-hidden="true"></div>
+  <div class="wrap" style="display:grid;gap:24px">
+    <p class="nf-code" aria-hidden="true">404</p>
+    ${kicker(null, 'Error 404')}
+    <h1 class="d2">This page got recycled.</h1>
+    <p class="lead" style="color:rgba(255,255,255,.8)">Let’s get you back to something that exists.</p>
+    <div class="btns on-dark"><a class="btn btn--lime" href="${routes.home}">Go to the home page ${ic.arrow}</a><a class="btn btn--ghost" href="${routes.products}">Products</a></div>
   </div>
-</section>
-`;
-
-  return page({
-    title: 'Page not found',
-    description: 'The page you are looking for does not exist.',
-    current: '/404',
-    path: '/404',
-    body,
-    bodyClass: 'is-404'
+</section>`
   });
-};

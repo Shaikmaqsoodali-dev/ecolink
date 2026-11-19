@@ -1,9 +1,18 @@
 /**
- * Central data for the Ecolink India site.
+ * Central content for the Ecolink India site.
  *
- * Every string here comes from the client's Website Copy Deck (copydeck.txt).
- * Anything the deck marks as "to be confirmed by client" is either omitted or
- * flagged with `pending: true` so it never ships as an invented claim.
+ * Source of truth: ../Ecolink_India_Website_Copy_Deck.docx.md (v1, 27 Oct 2026)
+ * plus the client's questionnaire answers (Nov 2026):
+ *   - Ecoshakti is a separate brand → own page + link out to ecoshakti.in
+ *   - "Pioneer" is used · 27 years · 3,000 t/month · 37,000 t/yr · 1,00,000 t target
+ *   - Standard sheet 8 x 4 ft, custom sizes on request, 4 mm–50 mm
+ *   - Office number only (+ one mobile, pending), factory shown as location only
+ *   - Fire class B stated once, never elaborated
+ *   - Testimonials (Bajaj, TVS, Atul), logos, certifications, leader photo: to be supplied
+ *   - No news page
+ *
+ * Nothing here is invented. Items still awaiting the client are left empty
+ * (and the matching section stays hidden) — see OPEN-ITEMS.md.
  */
 
 export const siteUrl = 'https://ecolinkindia.com';
@@ -12,18 +21,22 @@ export const site = {
   name: 'Ecolink India',
   legalName: 'Deluxe Recycling (India) Pvt. Ltd.',
   tagline: 'Waste goes in. Boards come out.',
-  taglineFull: 'Waste goes in. Boards come out. Products and technology for recycling waste into value.',
-  since: 'SINCE — 2005',
-  phone: '+91 98100 00000', // pending: client to supply live contact numbers
-  email: 'info@ecolinkindia.com', // pending: client to confirm mailbox
-  address: 'Industrial Area, India', // pending: client to supply factory address
-  copyright: 'Copyright © 2026 Deluxe Recycling (India) Pvt. Ltd.',
-  linkedin: '#', // pending: client to supply URL
-  youtube: '#', // pending: client to supply URL
-  instagram: '#' // pending: client to supply URL
+  about: 'Ecolink India is a brand of Deluxe Recycling (India) Pvt. Ltd. We’ve been turning packaging waste into useful things since 1999.',
+  since: 1999,
+  years: 27,
+  email: 'info@ecolinkindia.com',
+  phones: [
+    { label: 'Office', value: '+91 22 6610 1195', href: 'tel:+912266101195' }
+    // client confirmed: office line only
+  ],
+  office: ['A-Wing, 2nd Floor, Kakad House', 'Opp Bombay Hospital, New Marine Lines', 'Mumbai 400020'],
+  officeMap: 'https://www.google.com/maps/search/?api=1&query=Kakad+House+New+Marine+Lines+Mumbai+400020',
+  factory: 'Gujarat & Maharashtra',
+  copyright: `© 2026 Deluxe Recycling (India) Pvt. Ltd. All rights reserved.`,
+  ecoshaktiUrl: 'https://ecoshakti.in',
+  social: [] // pending: client to supply LinkedIn / YouTube / Instagram URLs
 };
 
-/** Route → filename (flat HTML output). */
 export const routes = {
   home: '/',
   about: '/about',
@@ -49,12 +62,12 @@ export const nav = [
     label: 'Products',
     href: routes.products,
     children: [
-      { label: 'Ecolink Boards', href: routes.ecolinkBoards, desc: 'Waste composite board — water resistant' },
-      { label: 'Ecoshakti Boards', href: routes.ecoshaktiBoards, desc: '100% waterproof board' },
-      { label: 'ESS Boards', href: routes.essBoards, desc: '100% waterproof sheet board' },
-      { label: 'Roofing Sheets', href: routes.roofingSheets, desc: 'Sheets for permanent roofs' },
-      { label: 'Doors', href: routes.doors, desc: 'Flush and moulded doors' },
-      { label: 'Pallets', href: routes.pallets, desc: 'Durable recycled pallets' }
+      { label: 'Ecolink Boards', href: routes.ecolinkBoards, desc: 'Water resistant · packaging waste', img: 'assets/img/film/board-edges.jpg' },
+      { label: 'Ecoshakti Boards', href: routes.ecoshaktiBoards, desc: '100% waterproof · multi-layer plastic', img: 'assets/img/b/board-closeup.jpg', badge: 'Sister brand' },
+      { label: 'ESS Boards', href: routes.essBoards, desc: '100% waterproof · tubes & flexibles', img: 'assets/img/film/sheet-surface.jpg' },
+      { label: 'Roofing Sheets', href: routes.roofingSheets, desc: 'Roofing from recycled waste' },
+      { label: 'Doors', href: routes.doors, desc: 'Solid doors with no wood in them' },
+      { label: 'Pallets', href: routes.pallets, desc: 'Carry the load, trip after trip' }
     ]
   },
   { label: 'Solutions', href: routes.solutions },
@@ -64,484 +77,464 @@ export const nav = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Home                                                                */
+/* Media                                                               */
 /* ------------------------------------------------------------------ */
 
-export const hero = {
-  headline: 'Turning waste into value, since 2005.',
-  sub: 'Waste goes in. Boards come out. Ecolink India manufactures recycled composite boards, roofing sheets, doors and pallets — and offers complete recycling plants for buyers worldwide.'
+const CLD = 'https://res.cloudinary.com/qxjpbgh6/video/upload';
+const FILM = 'v1794483928/Mutli-Layer_Plastic_Recycling_Line-_Deluxe_Recycling';
+
+export const media = {
+  heroLoop: { large: 'assets/video/hero-1600.mp4', small: 'assets/video/hero-960.mp4', poster: 'assets/img/hero-poster.jpg' },
+  film: {
+    title: 'Multi-layer plastic recycling line — Deluxe Recycling',
+    src: `${CLD}/q_auto,w_1600/${FILM}.mp4`,
+    poster: `${CLD}/so_16,w_1600,q_auto/${FILM}.jpg`,
+    duration: '2:43'
+  },
+  /** Off until the client confirms (they were on the old News page, which is being removed). */
+  showPress: false,
+  /** Third-party coverage that ran on the old site (YouTube). Click-to-load, no-cookie, local thumbnails. */
+  press: [
+    { id: 'XnKMu8stlb0', outlet: 'CNBC-TV18', title: 'Tetra Pak’s CSR initiative — The Changemakers' },
+    { id: '8J3_lgDVrdo', outlet: 'Mumbai Live', title: 'From Tetra Pak cartons to benches' },
+    { id: 'I6TSXk2-kDI', outlet: 'India TV', title: 'Tetra Pak cartons recycled into school desks and chairs' }
+  ],
+  docs: {
+    testResults: { href: 'assets/docs/ecolink-ess-test-results.pdf', label: 'Test results — Ecolink & ESS Boards', size: 'PDF · 1.7 MB' },
+    brochure: { href: 'assets/docs/deluxe-recycling-plant-brochure.pdf', label: 'Plant & machinery brochure', size: 'PDF · 3.6 MB' }
+  }
 };
+
+/* ------------------------------------------------------------------ */
+/* Shared facts                                                        */
+/* ------------------------------------------------------------------ */
 
 export const stats = [
-  { value: 27, suffix: '+', label: 'Years in recycling' },
-  { value: 3000, suffix: '', label: 'MT of waste diverted per year', grouping: true },
-  { value: 37000, suffix: '', label: 'MT of boards produced per year', grouping: true },
-  { value: 100000, suffix: '', label: 'MT of recycled material in use', grouping: true }
+  { value: 27, label: 'years of recycling, since 1999' },
+  { value: 3000, label: 'tonnes of waste recycled every month', unit: 't', grouping: true },
+  { value: 37000, label: 'tonnes a year', unit: 't', grouping: true },
+  { value: 100000, label: 'tonnes a year, where we’re headed', unit: 't', grouping: true, target: true }
 ];
 
-export const whatWeDo = {
-  eyebrow: 'What we do',
-  title: 'Two businesses, one loop.',
-  text: 'We buy waste others discard, convert it into durable products, and build the plants that make it possible — for our own factory and for customers around the world.',
-  items: [
-    {
-      no: '01',
-      title: 'Manufacture',
-      body: 'Recycled composite boards, sheets, roofing, doors and pallets sold under the Ecolink, Ecoshakti and ESS brands.'
-    },
-    {
-      no: '02',
-      title: 'Recycle',
-      body: 'We buy hard-to-recycle waste — plastic, wood, paper, tyres, cotton — and give it a second life as a product.'
-    },
-    {
-      no: '03',
-      title: 'Export',
-      body: 'Complete recycling plants with in-house technology, shipped and commissioned for buyers in Asia, Africa and beyond.'
-    }
-  ]
+export const sheet = {
+  size: '8 x 4 feet',
+  thickness: '4 mm to 50 mm',
+  minMm: 4,
+  maxMm: 50,
+  custom: 'Custom sizes are made as per your requirement.'
 };
 
-export const processSteps = [
-  { no: '01', title: 'Buy waste', body: 'Plastic, wood, paper, tyres, cotton and other hard-to-recycle waste is collected from suppliers across India.' },
-  { no: '02', title: 'Shred & sort', body: 'Feedstock is shredded, screened and graded so every input stream is consistent and clean.' },
-  { no: '03', title: 'Composite', body: 'Materials are combined and pressed under heat into dense, uniform boards and sheets.' },
-  { no: '04', title: 'Finish & dispatch', body: 'Boards are trimmed, surfaced, quality-checked and shipped to customers in India and abroad.' }
-];
-
-export const homeBoards = [
-  {
-    name: 'Ecolink Boards',
-    href: routes.ecolinkBoards,
-    tag: 'Water resistant',
-    body: 'Our core recycled composite board — dense, screw-holding and suitable for interiors and general applications where water resistance is required.',
-    img: 'assets/img/board-ecolink.jpg',
-    alt: 'Ecolink recycled composite board'
-  },
-  {
-    name: 'Ecoshakti Boards',
-    href: routes.ecoshaktiBoards,
-    tag: '100% waterproof',
-    body: 'A fully waterproof recycled board for wet areas, exteriors and applications where plywood is traditionally used.',
-    img: 'assets/img/board-ecoshakti.jpg',
-    alt: 'Ecoshakti waterproof recycled board'
-  },
-  {
-    name: 'ESS Boards',
-    href: routes.essBoards,
-    tag: '100% waterproof',
-    body: 'Sheet-format waterproof board for signage, panelling, furniture and long-life exterior use.',
-    img: 'assets/img/board-ess.jpg',
-    alt: 'ESS waterproof recycled sheet board'
-  }
-];
-
-export const applications = [
-  { icon: 'sofa', title: 'Furniture', body: 'Cupboards, wardrobes, cabinets and office furniture.',
-    img: 'assets/img/app-furniture.jpg', alt: 'Built-in wardrobe and cupboard made from recycled composite board' },
-  { icon: 'car', title: 'Automotive', body: 'Interior panels, trim and component backing.',
-    img: 'assets/img/app-automotive.jpg', alt: 'Car interior door panel made from composite fibre board' },
-  { icon: 'plane', title: 'Aviation', body: 'Lightweight panel applications.',
-    img: 'assets/img/app-aviation.jpg', alt: 'Aircraft cabin interior with lightweight composite wall panels' },
-  { icon: 'boat', title: 'Marine', body: 'Panels for high-humidity environments.',
-    img: 'assets/img/app-marine.jpg', alt: 'Boat cabin lined with moisture-resistant composite panels' },
-  { icon: 'box', title: 'Packaging', body: 'Crate liners, inserts and protective packaging.',
-    img: 'assets/img/app-packaging.jpg', alt: 'Composite board crate liners stacked with boxes in a warehouse' },
-  { icon: 'case', title: 'Luggage', body: 'Hard-shell cases and travel goods.',
-    img: 'assets/img/app-luggage.jpg', alt: 'Hard-shell trolley suitcases built from composite panel shells' },
-  { icon: 'bed', title: 'Mattress support', body: 'Base boards and support panels.',
-    img: 'assets/img/app-mattress-support.jpg', alt: 'Mattress resting on a flat composite bed base support board' },
-  { icon: 'rail', title: 'Railways', body: 'Interior panelling for coaches and rolling stock.',
-    img: 'assets/img/app-railways.jpg', alt: 'Train coach interior with composite wall panelling' },
-  { icon: 'bed', title: 'Headboards', body: 'Hotel and home headboard panels.',
-    img: 'assets/img/app-headboards.jpg', alt: 'Hotel bed with a composite headboard panel' },
-  { icon: 'sofa', title: 'Cupboards', body: 'Kitchen and storage carcasses.',
-    img: 'assets/img/app-cupboards.jpg', alt: 'Open kitchen cupboard carcasses made from recycled composite board' },
-  { icon: 'box', title: 'Packaging inserts', body: 'Die-cut inserts for electronics and exports.',
-    img: 'assets/img/app-packaging-inserts.jpg', alt: 'Die-cut board inserts holding an electronic device in a carton' }
+export const wasteStreams = [
+  { name: 'Aseptic beverage cartons', short: 'Cartons', img: 'assets/img/b/raw-carton.jpg' },
+  { name: 'Multi-layer plastic waste', short: 'MLP', img: 'assets/img/b/raw-mlp.jpg' },
+  { name: 'Poly Al waste', short: 'Poly Al', img: 'assets/img/b/raw-polyal.jpg' },
+  { name: 'Mix plastic waste', short: 'Mix plastic', img: 'assets/img/b/raw-mix.jpg' },
+  { name: 'Collapsible tubes', short: 'Tubes', img: 'assets/img/b/raw-tubes.jpg' },
+  { name: 'Mill plastic waste', short: 'Mill plastic', img: 'assets/img/b/raw-mill.jpg' }
 ];
 
 export const threeZeros = [
-  { title: 'Zero landfill', body: 'Waste that would be buried or burned becomes feedstock for a board.' },
-  { title: 'Zero formaldehyde', body: 'Boards are manufactured without added formaldehyde binders.' },
-  { title: 'Zero waste', body: 'Process offcuts and rejects are re-shredded and re-pressed into new boards.' }
+  { title: 'Water effluent', body: 'Nothing dirty goes down the drain.' },
+  { title: 'Solid waste', body: 'Everything that comes in goes out as product.' },
+  { title: 'Gas emissions', body: 'The process doesn’t add to the air.' }
+];
+
+/** Order follows the client's numbering in the copy deck (1–4 first). */
+export const endUses = [
+  { title: 'Auto-rickshaws', body: 'Seating and backrests.', img: 'assets/img/film/rickshaw-seat.jpg' },
+  { title: 'Shuttering and formwork', body: 'Builders use the boards to hold wet concrete in shape.', img: 'assets/img/b/app-shuttering.jpg' },
+  { title: 'Road modules', body: 'Panels laid into road surfaces.', img: 'assets/img/b/app-road.jpg' },
+  { title: 'Industrial pallets', body: 'They carry the cement bags and everything else.', img: 'assets/img/cement-pallet.jpg' },
+  { title: 'Furniture', body: 'Benches, tables, chairs and cupboards.', img: 'assets/img/b/app-bench.jpg' },
+  { title: 'Doors', body: 'Solid, and made of waste.', img: 'assets/img/door-display.jpg' },
+  { title: 'Public spaces', body: 'Benches and garbage bins.', img: 'assets/img/recycling-bin.jpg' },
+  { title: 'Stationery, gifts and exhibition stands', body: 'Smaller jobs, same board.', img: 'assets/img/fibreboard-grid.jpg' }
 ];
 
 /* ------------------------------------------------------------------ */
-/* Products                                                            */
+/* Home                                                                */
 /* ------------------------------------------------------------------ */
 
-export const products = [
-  {
-    slug: 'ecolink-boards',
-    name: 'Ecolink Boards',
-    href: routes.ecolinkBoards,
-    tag: 'Water resistant',
-    blurb: 'The original Ecolink recycled composite board — dense, screw-holding and water resistant.',
-    long: 'Ecolink Boards are manufactured from recycled plastic, wood flour and paper waste. The result is a dense, uniform board that cuts, drills and screws like plywood, without the timber.',
-    img: 'assets/img/board-ecolink.jpg',
-    alt: 'Ecolink recycled composite board',
-    specs: [
-      { label: 'Water resistance', value: 'Water resistant' },
-      { label: 'Manufactured from', value: 'Recycled plastic, wood flour, paper waste' },
-      { label: 'Sizes', value: '8 ft × 4 ft and custom sizes', pending: true },
-      { label: 'Thicknesses', value: '6 mm to 25 mm', pending: true }
-    ],
-    features: [
-      'Cuts, drills and screws like plywood',
-      'Resists moisture, rot and termite damage',
-      'Made from waste that would otherwise be landfilled'
-    ],
-    gallery: [
-      { src: 'assets/img/industry-furniture.jpg', alt: 'Interior furnished with panel boards for cupboards and wardrobes' },
-      { src: 'assets/img/industry-fmcg.jpg', alt: 'Packaging line where board inserts protect FMCG products' },
-      { src: 'assets/img/industry-logistics.jpg', alt: 'Warehouse where board packaging moves goods in logistics' }
+export const home = {
+  seoTitle: 'Ecolink India | Boards, Doors and Pallets Made From Waste',
+  seoDesc: 'India’s pioneer in recycled composite boards. We turn used packaging into waterproof boards, doors, pallets and roofing. Recycling since 1999.',
+  hero: {
+    headline: 'Waste goes in. Boards come out.',
+    sub: 'Since 1999 we’ve been collecting the packaging India throws away and pressing it into boards, doors, pallets and roofing that last.'
+  },
+  whatWeDo: {
+    title: 'India throws away a lot of packaging. We find a use for it.',
+    paras: [
+      'Juice cartons. Chips packets. Toothpaste tubes. Most of it is made of layers that don’t come apart, so most of it never gets recycled. It ends up in a landfill, a drain or a fire.',
+      'We worked out another way. We shred it, press it and turn it into solid boards that builders, carpenters and factories actually want to use.',
+      'We’ve been at it since 1999. We’re India’s pioneer in recycled composite boards, and we still know this material better than anyone.'
     ]
   },
-  {
-    slug: 'ecoshakti-boards',
-    name: 'Ecoshakti Boards',
-    href: routes.ecoshaktiBoards,
-    tag: '100% waterproof',
-    blurb: 'A fully waterproof recycled board for wet areas and exterior use.',
-    long: 'Ecoshakti Boards are pressed from recycled plastic and fibre waste to a fully waterproof specification. They are specified where plywood and MDF fail — bathrooms, kitchens, exteriors and humid environments.',
-    img: 'assets/img/board-ecoshakti.jpg',
-    alt: 'Ecoshakti waterproof recycled board',
-    specs: [
-      { label: 'Water resistance', value: '100% waterproof' },
-      { label: 'Manufactured from', value: 'Recycled plastic and fibre waste' },
-      { label: 'Sizes', value: '8 ft × 4 ft and custom sizes', pending: true },
-      { label: 'Thicknesses', value: '6 mm to 25 mm', pending: true }
-    ],
-    features: [
-      'Fully waterproof — no swelling, no delamination',
-      'Replaces plywood in wet and exterior applications',
-      'Termite and rot resistant'
-    ],
-    gallery: [
-      { src: 'assets/img/prefab-bathroom.jpg', alt: 'Bathroom lined with waterproof board panels' },
-      { src: 'assets/img/terrazzo-bench.jpg', alt: 'Composite bench standing outdoors in a garden terrace' },
-      { src: 'assets/img/prefab-cabin.jpg', alt: 'Exterior prefab structure clad in waterproof board' }
+  process: {
+    title: 'From the bin to the building site',
+    steps: [
+      { title: 'Collect', body: 'Used cartons, multi-layer plastic, flexible packaging and tubes arrive at our plant by the truckload.', img: 'assets/img/film/forklift-bales.jpg' },
+      { title: 'Shred', body: 'It’s sorted and cut down into small flakes.', img: 'assets/img/film/shredder.jpg' },
+      { title: 'Press', body: 'Heat and pressure fuse the flakes into a solid sheet. No trees are cut. No formaldehyde is used.', img: 'assets/img/film/hot-press.jpg' },
+      { title: 'Make', body: 'The boards are cut to size and become doors, pallets, roofing, furniture and more.', img: 'assets/img/film/board-stacks.jpg' }
     ]
   },
-  {
-    slug: 'ess-boards',
-    name: 'ESS Boards',
-    href: routes.essBoards,
-    tag: '100% waterproof',
-    blurb: 'Sheet-format waterproof recycled board for signage, panelling and furniture.',
-    long: 'ESS Boards are supplied in sheet format for signage, wall panelling, furniture and long-life exterior use. Like Ecoshakti, they are 100% waterproof.',
-    img: 'assets/img/board-ess.jpg',
-    alt: 'ESS waterproof recycled sheet board',
-    specs: [
-      { label: 'Water resistance', value: '100% waterproof' },
-      { label: 'Format', value: 'Sheet board' },
-      { label: 'Sizes', value: '8 ft × 4 ft and custom sizes', pending: true },
-      { label: 'Thicknesses', value: '4 mm to 18 mm', pending: true }
-    ],
-    features: [
-      'Flat, stable sheets for printing and panelling',
-      '100% waterproof for exterior signage',
-      'Smooth surface ready for finishing'
-    ],
-    gallery: [
-      { src: 'assets/img/fibreboard-grid.jpg', alt: 'Grid of flat fibreboard sheets ready for finishing' },
-      { src: 'assets/img/school-chair.jpg', alt: 'School chair built from composite board panels' }
+  becomes: {
+    title: 'Once it’s a board, it can be almost anything.',
+    text: 'Doors. Pallets. Roofing sheets. Furniture. Shuttering and formwork. Road modules. Park benches. Garbage bins. Seating and backrests for auto-rickshaws. Even stationery and gifts.'
+  },
+  zeros: { title: 'Our plant runs on three zeros.', text: 'What comes in as waste goes out as product. Nothing is left behind.' },
+  comparison: {
+    title: 'Why not just use plywood?',
+    text: 'Plywood comes from trees. MDF and particle board come from wood chips and glue, and they swell once water gets in. Our boards come from waste, and two of the three don’t mind water at all.',
+    head: ['', 'Our boards', 'Plywood', 'MDF and particle board'],
+    rows: [
+      ['Made from', 'Packaging waste', 'Trees', 'Wood chips and adhesive'],
+      ['Trees cut', 'None', 'Yes', 'Yes'],
+      ['Water', 'Ecolink is water resistant. Ecoshakti and ESS are 100% waterproof.', 'Layers can swell and peel', 'Swells and breaks down'],
+      ['Formaldehyde', 'None', 'Often in the adhesive', 'Often in the adhesive']
     ]
   },
-  {
-    slug: 'roofing-sheets',
-    name: 'Roofing Sheets',
-    href: routes.roofingSheets,
-    tag: 'From waste',
-    blurb: 'Durable roofing sheets made from recycled waste material.',
-    long: 'Ecolink roofing sheets are manufactured from recycled plastic and fibre waste. They are lightweight, do not rust and are suited to industrial, agricultural and residential roofing.',
-    img: 'assets/img/roofing.jpg',
-    alt: 'Recycled roofing sheet',
-    specs: [
-      { label: 'Material', value: 'Recycled plastic and fibre composite' },
-      { label: 'Profile', value: 'Corrugated', pending: true },
-      { label: 'Sizes', value: 'Custom lengths', pending: true },
-      { label: 'Colour range', value: 'To be confirmed by client', pending: true }
-    ],
-    features: [
-      'Will not rust or corrode',
-      'Lightweight and easy to install',
-      'Made from recycled waste'
-    ],
-    gallery: [
-      { src: 'assets/img/industry-construction.jpg', alt: 'Industrial shed under construction with roofing structure' },
-      { src: 'assets/img/prefab-cabin.jpg', alt: 'Rural prefab cabin roofed with recycled sheets' }
-    ]
+  solutions: {
+    title: 'Want to start recycling too?',
+    text: 'We build recycling plants as well. Sizes run from 1.5 to 10 tonnes a day, set up and handed over ready to run. Plants built on our technology are working in 7 countries.'
   },
-  {
-    slug: 'doors',
-    name: 'Doors',
-    href: routes.doors,
-    tag: 'From waste',
-    blurb: 'Flush and moulded doors made with recycled composite board.',
-    long: 'Ecolink doors are built on recycled composite cores, giving them moisture resistance and dimensional stability that conventional doors do not offer.',
-    img: 'assets/img/doors.jpg',
-    alt: 'Recycled composite door',
-    specs: [
-      { label: 'Type', value: 'Flush and moulded doors', pending: true },
-      { label: 'Core', value: 'Recycled composite board' },
-      { label: 'Sizes', value: 'Standard and custom', pending: true },
-      { label: 'Finish range', value: 'To be confirmed by client', pending: true }
-    ],
-    features: [
-      'Moisture-resistant core that will not swell',
-      'Stable in humid and coastal conditions',
-      'Made from recycled waste'
-    ],
-    gallery: [
-      { src: 'assets/img/door-hallway.jpg', alt: 'White flush door fitted in a bright hallway' },
-      { src: 'assets/img/door-rustic.jpg', alt: 'Rustic wooden-finish door in a character interior' },
-      { src: 'assets/img/door-display.jpg', alt: 'Composite door on exhibition display' }
-    ]
-  },
-  {
-    slug: 'pallets',
-    name: 'Pallets',
-    href: routes.pallets,
-    tag: 'From waste',
-    blurb: 'Heavy-duty pallets manufactured from recycled composite material.',
-    long: 'Ecolink pallets are pressed from recycled composite material. They do not rot, do not absorb moisture and are exempt from ISPM-15 heat treatment requirements.',
-    img: 'assets/img/pallets.jpg',
-    alt: 'Recycled composite pallet',
-    specs: [
-      { label: 'Material', value: 'Recycled composite board' },
-      { label: 'Load capacity', value: 'To be confirmed by client', pending: true },
-      { label: 'Sizes', value: 'Standard export sizes and custom', pending: true },
-      { label: 'Compliance', value: 'ISPM-15 exempt (plastic composite)', pending: true }
-    ],
-    features: [
-      'Will not rot, swell or absorb water',
-      'Lighter than hardwood pallets of the same strength',
-      'Reusable for many shipping cycles'
-    ],
-    gallery: [
-      { src: 'assets/img/recycled-pallet.jpg', alt: 'Recycled composite pallet in a warehouse' },
-      { src: 'assets/img/pallet-jack.jpg', alt: 'Worker moving loaded pallets with a pallet jack' },
-      { src: 'assets/img/warehouse-sacks.jpg', alt: 'Goods stacked on pallets in warehouse storage' }
-    ]
-  }
-];
-
-export const productApplications = {
-  'ecolink-boards': [
-    'Furniture and cabinetry',
-    'Interior panelling',
-    'Packaging and inserts',
-    'Mattress and headboard supports',
-    'Luggage and hard-shell cases'
-  ],
-  'ecoshakti-boards': [
-    'Bathroom and kitchen furniture',
-    'Exterior panelling',
-    'Coastal and humid environments',
-    'Wet-area signage',
-    'Replacement for plywood in wet areas'
-  ],
-  'ess-boards': [
-    'Outdoor signage',
-    'Wall and ceiling panelling',
-    'Furniture panels',
-    'Exhibition and retail displays',
-    'Exterior cladding'
-  ],
-  'roofing-sheets': [
-    'Industrial sheds',
-    'Agricultural buildings',
-    'Residential roofing',
-    'Shelters and outbuildings'
-  ],
-  doors: [
-    'Residential doors',
-    'Commercial interiors',
-    'Humid and coastal properties',
-    'Bathroom and kitchen doors'
-  ],
-  pallets: [
-    'Export shipping',
-    'Warehouse handling',
-    'Cold storage',
-    'Chemical and food-grade storage'
-  ]
+  cta: { title: 'Got something to build?', text: 'Tell us what it is. We’ll tell you which board does it best.' }
 };
 
-export const otherProducts = products.slice(3);
+/* ------------------------------------------------------------------ */
+/* Clients                                                             */
+/* ------------------------------------------------------------------ */
+
+/** Client logos (supplied Nov 2026) — assets/img/logos/. A name without `logo` renders as type. */
+export const clients = [
+  { name: 'Bajaj', logo: 'assets/img/logos/bajaj.svg' },
+  { name: 'TVS', logo: 'assets/img/logos/tvs.svg' },
+  { name: 'Atul Auto', logo: 'assets/img/logos/atul.png' },
+  { name: 'Godrej', logo: 'assets/img/logos/godrej.svg' },
+  { name: 'Tetra Pak', logo: 'assets/img/logos/tetra-pak.svg' },
+  { name: 'Indian Railways', logo: 'assets/img/logos/indian-railways.png' },
+  { name: 'Food Corporation of India', logo: 'assets/img/logos/fci.svg', wide: true },
+  { name: 'MSAMB', logo: 'assets/img/logos/msamb.png' },
+  { name: 'Maharashtra State Warehousing Corporation', logo: 'assets/img/logos/mswc.png', wide: true },
+  { name: 'Uno Minda', logo: 'assets/img/logos/uno-minda.svg' },
+  { name: 'River Recycle', logo: 'assets/img/logos/river-recycle.svg', note: 'Finland' },
+  { name: 'Kevian', logo: 'assets/img/logos/kevian.png', note: 'Kenya' },
+  { name: 'Caltech', logo: 'assets/img/logos/caltech.svg' }
+];
+
+/** Rendered only once real quotes arrive: { quote, name, role, company }. */
+export const testimonials = [
+  // Bajaj · TVS · Atul — quote, name and designation to be supplied by the client
+];
+
+/** Rendered only once supplied: { name, img }. */
+export const certifications = [];
 
 /* ------------------------------------------------------------------ */
 /* About                                                               */
 /* ------------------------------------------------------------------ */
 
-export const aboutStory = {
-  eyebrow: 'Our story',
-  title: 'Built on waste, since 2005.',
-  paras: [
-    'Ecolink India is the manufacturing brand of Deluxe Recycling (India) Pvt. Ltd., a recycling company operating since 2005. What began as a waste collection business grew into something bigger: a factory that turns other people\'s waste into products people buy.',
-    'Today the company does three things — it manufactures recycled composite boards, sheets, roofing, doors and pallets; it buys and processes hard-to-recycle waste; and it exports complete recycling plants with technology developed in-house.',
-    'The loop closes at our own factory. The waste we buy becomes the boards we sell, and the offcuts come back as feedstock for the next batch.'
-  ]
+export const about = {
+  seoTitle: 'About Ecolink India | Recycling Packaging Waste Since 1999',
+  seoDesc: 'Deluxe Recycling (India) Pvt. Ltd. has been turning packaging waste into boards since 1999. Meet the pioneers behind Ecolink.',
+  hero: { headline: 'We’ve been at this since 1999.', sub: 'Turning used packaging into boards wasn’t an obvious idea back then. We tried it anyway.' },
+  story: {
+    question: 'What happens to a used juice carton?',
+    paras: [
+      'Deluxe Recycling (India) Pvt. Ltd. started with a plain question. What happens to a used juice carton?',
+      'The honest answer was nothing good. So we went looking for a better one.',
+      'It took years of trials, a lot of failed batches and plenty of patience. Then we had a board. Solid, strong and made entirely from packaging people had thrown out. We called it Ecolink, and we’ve been improving it ever since.',
+      'Today our plants in Gujarat and Maharashtra recycle about 3,000 tonnes of waste every month. The boards go into doors, pallets, roofing, furniture, building sites and even roads. The know-how has travelled too. Recycling plants built on our technology are working in seven countries.'
+    ]
+  },
+  believe: { title: 'Reduce. Reuse. Recycle.', text: 'Three words everyone knows. We just do all three, every day, one truck at a time.' },
+  values: [
+    { title: 'Balance', body: 'Good business and a cleaner planet should both win. If only one does, we’ve got it wrong.' },
+    { title: 'Quality', body: 'A recycled board has to beat the alternative, not just feel better about itself.' },
+    { title: 'Communication', body: 'We’ll tell you plainly what a board can do. And what it can’t.' },
+    { title: 'Professionalism', body: 'Delivered when we said. Built the way we said.' }
+  ],
+  headed: {
+    title: '37,000 tonnes today. 1,00,000 next.',
+    text: 'We recycle 37,000 tonnes of waste a year. Our target is 1,00,000. That means more plants, more boards and a lot more cartons kept off the street.'
+  },
+  leader: {
+    name: 'Jignesh Shah',
+    role: '', // pending: designation
+    bio: '', // pending: 80–100 words
+    img: 'assets/img/jignesh-shah.jpg'
+  },
+  cta: { title: 'Want to know more?', text: 'Ask us anything about the boards, the plant or the process.' }
 };
 
-export const aboutValues = [
-  { no: '01', title: 'Waste is feedstock', body: 'We buy what others discard — plastic, wood, paper, tyres, cotton — because it is raw material, not rubbish.' },
-  { no: '02', title: 'Products must perform', body: 'A recycled product only matters if it competes on price and performance with the virgin alternative.' },
-  { no: '03', title: 'Technology in-house', body: 'Our recycling plant technology is developed and built by our own engineering team.' },
-  { no: '04', title: 'Say what is true', body: 'We publish verified specifications only. Where a number is not yet confirmed, we say so.' }
+/* ------------------------------------------------------------------ */
+/* Products                                                            */
+/* ------------------------------------------------------------------ */
+
+export const productsPage = {
+  seoTitle: 'Products | Recycled Boards, Roofing, Doors and Pallets | Ecolink India',
+  seoDesc: 'Boards, roofing sheets, doors and pallets made from recycled packaging waste. Standard 8 x 4 ft sheets, 4 mm to 50 mm thick. Custom sizes on request.',
+  hero: { headline: 'Made from waste. Built to be used.', sub: 'Boards, roofing, doors and pallets. All from packaging that would otherwise be thrown away.' },
+  boards: { title: 'Three boards. One difference.', text: 'Every board we make starts as packaging waste. What changes is the kind of waste, and how the board handles water.' },
+  endUses: { title: 'You’ve probably already walked past one.' },
+  cta: { title: 'Not sure which board you need?', text: 'Tell us what you’re building. We’ll point you to the right one.' }
+};
+
+const fireB = { label: 'Fire class', value: 'B' };
+const sheetSpecs = [
+  { label: 'Standard sheet', value: sheet.size },
+  { label: 'Custom sizes', value: 'Made on request' },
+  { label: 'Thickness', value: sheet.thickness }
 ];
 
-export const aboutStats = [
-  { value: 27, suffix: '+', label: 'Years in recycling' },
-  { value: 3000, suffix: '', label: 'MT waste diverted / year', grouping: true },
-  { value: 37000, suffix: '', label: 'MT boards produced / year', grouping: true }
+export const boards = [
+  {
+    slug: 'ecolink-boards',
+    name: 'Ecolink Boards',
+    href: routes.ecolinkBoards,
+    water: 'Water resistant',
+    waterLevel: 1,
+    waste: 'Used packaging, including beverage cartons',
+    wasteShort: 'Beverage cartons & packaging',
+    rawImg: 'assets/img/b/raw-carton.jpg',
+    img: 'assets/img/film/board-edges.jpg',
+    hero: 'assets/img/film/board-stacks.jpg',
+    seoTitle: 'Ecolink Boards | Water Resistant Boards From Packaging Waste',
+    seoDesc: 'Water resistant Ecolink boards made from recycled packaging. 8 x 4 ft sheets, 4 mm to 50 mm thick, custom sizes on request. Get a quote.',
+    sub: 'Water resistant boards, made from packaging waste.',
+    what: [
+      'Every Ecolink board starts as something someone used once. A juice carton. A milk pack. A wrapper. We shred it, press it and end up with a flat, solid sheet that works the way a board should.',
+      'No tree is cut to make it.'
+    ],
+    specs: [{ label: 'Made from', value: 'Packaging waste, including beverage cartons' }, ...sheetSpecs, { label: 'Water', value: 'Resistant' }, fireB],
+    uses: ['Furniture and partitions', 'Shuttering and formwork on building sites', 'Benches and garbage bins', 'Stationery, gifts and exhibition stands'],
+    usesImg: ['assets/img/b/app-bench.jpg', 'assets/img/b/app-shuttering.jpg', 'assets/img/terrazzo-bench.jpg', 'assets/img/fibreboard-grid.jpg'],
+    note: 'Ecolink is water resistant, not waterproof. It handles damp and splashes well. If your board will sit in standing water, look at Ecoshakti or ESS instead.',
+    downloads: ['testResults'],
+    cta: 'Need Ecolink boards for a project?',
+    quote: 'Get a quote for Ecolink Boards'
+  },
+  {
+    slug: 'ecoshakti-boards',
+    name: 'Ecoshakti Boards',
+    href: routes.ecoshaktiBoards,
+    sister: true,
+    water: '100% waterproof',
+    waterLevel: 2,
+    waste: 'Multi-layer plastic waste',
+    wasteShort: 'Multi-layer plastic',
+    rawImg: 'assets/img/b/raw-mlp.jpg',
+    img: 'assets/img/b/board-closeup.jpg',
+    hero: 'assets/img/film/press-line.jpg',
+    seoTitle: 'Ecoshakti Boards | 100% Waterproof Boards From Plastic Waste',
+    seoDesc: '100% waterproof Ecoshakti boards made from multi-layer plastic waste. 8 x 4 ft sheets, 4 mm to 50 mm thick. Custom sizes available.',
+    sub: '100% waterproof. Made from multi-layer plastic waste.',
+    what: [
+      'Look at a chips packet. Plastic outside, foil inside, bonded so tightly that most recyclers won’t go near it. We do. We turn it into Ecoshakti, a board water can’t get into.'
+    ],
+    specs: [{ label: 'Made from', value: 'Multi-layer plastic waste' }, ...sheetSpecs, { label: 'Water', value: '100% waterproof' }, fireB],
+    uses: ['Wet areas and outdoor use', 'Shuttering and formwork that gets rained on', 'Benches and garbage bins', 'Road modules'],
+    usesImg: ['assets/img/terrazzo-bench.jpg', 'assets/img/b/app-board-wall.jpg', 'assets/img/recycling-bin.jpg', 'assets/img/b/app-road.jpg'],
+    downloads: [],
+    cta: 'Need a board that ignores water?',
+    quote: 'Get a quote for Ecoshakti Boards'
+  },
+  {
+    slug: 'ess-boards',
+    name: 'ESS Boards',
+    href: routes.essBoards,
+    water: '100% waterproof',
+    waterLevel: 2,
+    waste: 'Flexible packaging and collapsible tubes',
+    wasteShort: 'Tubes & flexible packaging',
+    rawImg: 'assets/img/b/raw-tubes.jpg',
+    img: 'assets/img/film/sheet-surface.jpg',
+    hero: 'assets/img/film/quality-check.jpg',
+    seoTitle: 'ESS Boards | 100% Waterproof Composite Boards | Ecolink India',
+    seoDesc: '100% waterproof ESS composite boards made from flexible packaging and collapsible tubes. 8 x 4 ft sheets, 4 mm to 50 mm thick.',
+    sub: '100% waterproof composite board, made from flexible packaging and old tubes.',
+    what: [
+      'Toothpaste tubes. Cosmetic tubes. Soft, squeezable packaging. Hardly anyone wants this stuff, so we took it. Pressed together, it becomes a tough composite board that shrugs off water.'
+    ],
+    specs: [{ label: 'Made from', value: 'Flexible packaging and collapsible tubes' }, ...sheetSpecs, { label: 'Water', value: '100% waterproof' }, fireB],
+    uses: ['Wet areas and outdoor use', 'Furniture that lives outside', 'Benches and garbage bins', 'Pallets and shuttering'],
+    usesImg: ['assets/img/film/sheet-surface.jpg', 'assets/img/b/app-bench.jpg', 'assets/img/recycling-bin.jpg', 'assets/img/recycled-pallet.jpg'],
+    downloads: ['testResults'],
+    cta: 'Want to see it in your project?',
+    quote: 'Get a quote for ESS Boards'
+  }
 ];
+
+export const madeProducts = [
+  {
+    slug: 'doors',
+    name: 'Doors',
+    href: routes.doors,
+    line: 'Solid doors with no wood in them.',
+    img: 'assets/img/door-display.jpg',
+    hero: 'assets/img/b/app-door.jpg',
+    seoTitle: 'Recycled Composite Doors | Solid Doors Without Wood | Ecolink India',
+    seoDesc: 'Solid composite doors made from recycled packaging waste. No wood, no trees cut. Get a quote from Ecolink India.',
+    what: ['A door gets slammed, kicked, painted and left out in the rain. It had better be tough. Ours are solid composite doors pressed from recycled packaging, so no tree is cut for them.'],
+    specs: [
+      { label: 'Made from', value: 'Recycled packaging waste' },
+      { label: 'Build', value: 'Solid composite' },
+      { label: 'Sizes, thickness and finishes', value: 'On request' }
+    ],
+    uses: ['Homes and apartments', 'Offices and schools', 'Site cabins and farmhouses'],
+    usesImg: [],
+    cta: 'Want a door that didn’t cost a tree?',
+    quote: 'Get a quote for Doors'
+  },
+  {
+    slug: 'pallets',
+    name: 'Pallets',
+    href: routes.pallets,
+    line: 'Pallets that carry the load, trip after trip.',
+    img: 'assets/img/recycled-pallet.jpg',
+    hero: 'assets/img/pallet-render.jpg',
+    seoTitle: 'Recycled Composite Pallets | Industrial Pallets | Ecolink India',
+    seoDesc: 'Strong industrial pallets made from recycled packaging waste. Built for static and dynamic loads. Get a quote from Ecolink India.',
+    what: ['Pallets get dropped, dragged, stacked and left out in the weather. Ours are made from recycled packaging and pressed to take it. They work in warehouses, on factory floors and on the back of trucks.'],
+    specs: [
+      { label: 'Made from', value: 'Recycled packaging waste' },
+      { label: 'Load', value: 'Static and dynamic' },
+      { label: 'Sizes', value: 'On request' }
+    ],
+    uses: ['Warehouses and distribution', 'Cement, chemical and FMCG plants', 'Factory floors and loading docks'],
+    usesImg: ['assets/img/warehouse-sacks.jpg', 'assets/img/cement-pallet.jpg', 'assets/img/b/app-pallets.jpg'],
+    cta: 'Moving something heavy?',
+    quote: 'Get a quote for Pallets'
+  },
+  {
+    slug: 'roofing-sheets',
+    name: 'Roofing Sheets',
+    href: routes.roofingSheets,
+    line: 'Roofing sheets made from recycled packaging waste.',
+    img: 'assets/img/film/press-line.jpg',
+    hero: 'assets/img/film/press-line.jpg',
+    seoTitle: 'Roofing Sheets From Recycled Waste | Ecolink India',
+    seoDesc: 'Roofing sheets made from recycled packaging waste by Ecolink India. Sizes and profiles on request. Get a quote.',
+    what: ['Roofing sheets made from the same recycled packaging waste as our boards. Sizes and profiles are made to order, so tell us what you’re covering.'],
+    specs: [
+      { label: 'Made from', value: 'Recycled packaging waste' },
+      { label: 'Sizes and profiles', value: 'On request' }
+    ],
+    uses: [],
+    usesImg: [],
+    cta: 'Need a roof over something?',
+    quote: 'Get a quote for Roofing Sheets'
+  }
+];
+
+export const allProducts = [...boards, ...madeProducts];
 
 /* ------------------------------------------------------------------ */
 /* Solutions                                                           */
 /* ------------------------------------------------------------------ */
 
-export const solutionsIntro = {
-  eyebrow: 'Technology & turnkey solutions',
-  title: 'Complete recycling plants, delivered worldwide.',
-  text: 'Ecolink designs, builds and commissions complete recycling plants. Our technology is developed in-house, proven in our own factory, and now running for buyers across Asia, Africa and the Middle East.'
+export const solutionsPage = {
+  seoTitle: 'Turnkey Recycling Plants for Mixed and Multi-Layer Plastic | Ecolink India',
+  seoDesc: 'Turnkey recycling plants for mix plastic and multi-layer plastic waste, from 1.5 to 10 tonnes a day. No washing required. Built by Ecolink India.',
+  hero: {
+    headline: 'Start your own recycling plant.',
+    sub: 'Turnkey plants for mix plastic waste and multi-layer plastic waste. Eco-friendly technology. No washing required.'
+  },
+  idea: [
+    'You bring the waste and the land. We bring 27 years of knowing how to turn it into boards.',
+    'We didn’t learn this from a textbook. We learned it by running our own plant since 1999. So when we build one for you, we’re handing over something that already works.'
+  ],
+  noWash: { title: 'No washing. Really.', text: 'Most plastic recycling starts with a wash. That means water, drains and dirty effluent to deal with. Our process skips it. Less water, less cost, less mess.' },
+  out: ['Water resistant boards', '100% waterproof boards', '100% waterproof composite boards'],
+  outUses: ['doors', 'pallets', 'benches', 'garbage bins', 'shuttering', 'road modules'],
+  sizes: [
+    { tpd: 1.5, area: 700, heating: 'Electrical', power: 170 },
+    { tpd: 3.0, area: 1100, heating: 'Electrical', power: 250 },
+    { tpd: 5.0, area: 2500, heating: 'Multi-fuel fired', power: 201 },
+    { tpd: 10.0, area: 3000, heating: 'Multi-fuel fired', power: 370 }
+  ],
+  steps: [
+    { title: 'Plan', body: 'We design the plant layout and process for your waste and your space.' },
+    { title: 'Build', body: 'The machinery is made and supplied.' },
+    { title: 'Install', body: 'We set it up on site.' },
+    { title: 'Calibrate', body: 'Trial runs until the boards come out right.' },
+    { title: 'Train', body: 'Your team learns to run it.' },
+    { title: 'Support', body: 'We stay on the line when you need us, including help with EPR planning.' }
+  ],
+  epr: 'Brands and producers are now responsible for the packaging they put into the market. Recycling is how they meet that responsibility. A plant like this helps you do it.',
+  cta: { title: 'Thinking about a plant?', text: 'Tell us what waste you have and how much space. We’ll suggest a size.' }
 };
 
-export const plantCountries = [
-  { name: 'Turkey', lat: 39, lon: 35 },
-  { name: 'Kenya', lat: 0, lon: 37 },
-  { name: 'Malaysia', lat: 4, lon: 102 },
-  { name: 'India', lat: 22, lon: 79 },
-  { name: 'Philippines', lat: 13, lon: 122 },
-  { name: 'East Timor', lat: -9, lon: 125 },
-  { name: 'Sri Lanka', lat: 7, lon: 81 }
+/** Projection bounds for the dot map (tools/dotmap.mjs) and the pins. */
+export const mapView = { lon0: 5, lon1: 140, lat0: -22, lat1: 50, step: 1.35 };
+
+export const plants = [
+  { country: 'Turkey', lat: 39, lon: 34, tpd: ['10'] },
+  { country: 'Kenya', lat: 0.2, lon: 37.5, tpd: ['3', '10', '10'] },
+  { country: 'Malaysia', lat: 3.5, lon: 102, tpd: ['4'] },
+  { country: 'India', lat: 20, lon: 76, tpd: ['20', '40', '50'], detail: ['Karnataka 20', 'Gujarat 40', 'Maharashtra 50'], home: true },
+  { country: 'Philippines', lat: 13, lon: 122, tpd: ['1.5', '5'] },
+  { country: 'East Timor', lat: -8.8, lon: 125.7, tpd: ['1.5'] },
+  { country: 'Sri Lanka', lat: 7.6, lon: 80.7, tpd: ['3'] }
 ];
-
-export const plantSteps = [
-  { no: '01', title: 'Feedstock assessment', body: 'We analyse your available waste streams and recommend the right plant configuration.' },
-  { no: '02', title: 'Plant design', body: 'Layout, throughput and product specification are engineered to your market.' },
-  { no: '03', title: 'Manufacturing', body: 'Machinery is built at our own facility in India and factory-tested before dispatch.' },
-  { no: '04', title: 'Shipping & installation', body: 'Equipment is shipped, installed and assembled on your site.' },
-  { no: '05', title: 'Training', body: 'Your operators are trained on running and maintaining the plant.' },
-  { no: '06', title: 'Ongoing support', body: 'We remain available for spares, optimisation and capacity expansion.' }
-];
-
-export const wasteTaken = ['Plastic', 'Wood', 'Paper', 'Tyres', 'Cotton', 'Other hard-to-recycle waste'];
-export const comesOut = ['Boards', 'Sheets', 'Roofing', 'Doors', 'Pallets'];
-
-export const plantSizes = [
-  { name: 'Small', body: 'Entry-level plant for local markets and first-time recyclers.' },
-  { name: 'Medium', body: 'Balanced throughput for regional supply and multi-product output.' },
-  { name: 'Large', body: 'Industrial-scale capacity for export-oriented operations.' }
-];
-
-export const epr = {
-  title: 'Extended Producer Responsibility (EPR)',
-  body: 'Governments across Asia and Africa are introducing EPR rules that make brands responsible for the waste their products create. A recycling plant turns that obligation into a local supply chain — and a revenue stream.'
-};
+export const mumbai = { lat: 19.07, lon: 72.88 };
 
 /* ------------------------------------------------------------------ */
 /* Environment                                                         */
 /* ------------------------------------------------------------------ */
 
-export const environment = {
-  eyebrow: 'Environment',
-  title: 'The maths of waste.',
-  lead: 'Every tonne we process is a tonne that is not buried, burned or flushed into a river. These are the flows through our factory, stated plainly.',
-  wasteTaken,
-  comesOut,
-  zeros: threeZeros,
-  stats: [
-    { value: 3000, suffix: '', label: 'MT of waste diverted per year', grouping: true },
-    { value: 37000, suffix: '', label: 'MT of boards produced per year', grouping: true },
-    { value: 27, suffix: '+', label: 'Years of continuous operation' }
-  ]
+export const environmentPage = {
+  seoTitle: 'Environment | How Ecolink Turns Packaging Waste Into Boards',
+  seoDesc: 'Zero water effluent, zero solid waste, zero gas emissions. See how Ecolink keeps packaging waste out of landfills and turns it into boards.',
+  hero: { headline: 'A juice carton is used for ten minutes. Then what?', sub: 'We’ve spent 27 years answering that.' },
+  problem: 'Packaging is made to be used once and thrown away. And a lot of it is hard to recycle, because it’s layers of paper, plastic and foil stuck together. The usual recyclers can’t pull them apart. So it gets dumped, burnt or left to pile up.',
+  doing: 'We take it. All of it. We shred it and press it into boards, and the boards become things people use every day.',
+  intake: ['Aseptic beverage cartons', 'Multi-layer plastic', 'Poly Al waste', 'Mix plastic waste', 'Flexible packaging', 'Collapsible tubes', 'Mill plastic waste'],
+  safe: 'Our boards are made without formaldehyde.',
+  rrr: 'We’re not the ones who made the waste. But we’re happy to be the ones who deal with it.',
+  cta: { title: 'Have waste that needs a home?', text: 'If you make packaging waste or collect it, we’d like to hear from you.' }
 };
 
 /* ------------------------------------------------------------------ */
 /* FAQ                                                                 */
 /* ------------------------------------------------------------------ */
 
+export const faqPage = {
+  seoTitle: 'FAQ | Ecolink Boards, Sizes, Water Resistance and Orders',
+  seoDesc: 'Answers to common questions about Ecolink boards: sizes, thickness, water resistance, fire class, custom orders and recycling plants.',
+  hero: { headline: 'Questions people ask us', sub: 'If yours isn’t here, just ask.' }
+};
+
 export const faqs = [
-  { q: 'What are Ecolink boards made from?', a: 'Recycled plastic, wood flour and paper waste — all hard-to-recycle streams that would otherwise be landfilled.' },
-  { q: 'Are Ecolink boards waterproof?', a: 'Ecolink Boards are water resistant. For fully waterproof applications, specify Ecoshakti Boards or ESS Boards, which are 100% waterproof.' },
-  { q: 'What sizes and thicknesses do you supply?', a: 'Standard sheet size is 8 ft × 4 ft, with thicknesses from 6 mm to 25 mm. Custom sizes are available on request. [Confirm with client]', pending: true },
-  { q: 'Can I cut, drill, paint or glue the boards?', a: 'Yes — the boards work with standard woodworking tools, fasteners and adhesives. [Confirm with client]', pending: true },
-  { q: 'Do the boards contain formaldehyde?', a: 'No formaldehyde binders are added during manufacturing.' },
-  { q: 'Are the boards termite resistant?', a: 'Yes. The composite material does not provide a food source for termites.' },
-  { q: 'How much waste does one board divert?', a: 'Each board is manufactured from recycled waste material. Exact per-unit figures are being compiled for publication. [Confirm with client]', pending: true },
-  { q: 'What is the difference between Ecolink, Ecoshakti and ESS?', a: 'Ecolink Boards are water resistant. Ecoshakti Boards and ESS Boards are 100% waterproof. Ecoshakti is supplied in board form, ESS in sheet form.' },
-  { q: 'Do you deliver across India?', a: 'Yes, we dispatch across India and export internationally. [Confirm with client]', pending: true },
-  { q: 'Do you export recycling plants?', a: 'Yes. Complete plants are designed, built and commissioned in-house and shipped to buyers worldwide.' },
-  { q: 'How do I get a price or a quote?', a: 'Use the enquiry form on the Contact page or call us. We respond to qualified enquiries within one working day.' },
-  { q: 'What certifications do the products carry?', a: 'Certification details are being finalised and will be published here once confirmed. [Confirm with client]', pending: true }
+  { group: 'The boards', q: 'What are the boards made of?', a: 'Recycled packaging waste. Ecolink uses packaging including beverage cartons. Ecoshakti uses multi-layer plastic. ESS uses flexible packaging and tubes. No trees are cut.' },
+  { group: 'The boards', q: 'What sizes do you make?', a: 'The standard sheet is 8 x 4 feet. Need something different? We make custom sizes as per your requirement.' },
+  { group: 'The boards', q: 'How thick are the boards?', a: 'From 4 mm to 50 mm as standard.' },
+  { group: 'The boards', q: 'Are the boards waterproof?', a: 'It depends on the board. Ecolink is water resistant. Ecoshakti and ESS are 100% waterproof.' },
+  { group: 'The boards', q: 'What is the fire class?', a: 'Class B.' },
+  { group: 'The boards', q: 'Is Ecoshakti different from Ecolink?', a: 'Both are made from waste. Ecoshakti is made from multi-layer plastic and is 100% waterproof. It also has its own website at ecoshakti.in.' },
+  { group: 'Ordering', q: 'How do I order?', a: 'Send us an enquiry through the Contact page, or email info@ecolinkindia.com.' },
+  { group: 'Ordering', q: 'Do you make anything besides boards?', a: 'Yes. Roofing sheets, doors, pallets, furniture and more. See the Products page.' },
+  { group: 'Ordering', q: 'Where are your factories?', a: 'We have factories in Gujarat and Maharashtra. Our head office is in Mumbai.' },
+  { group: 'Recycling plants', q: 'Do you build recycling plants?', a: 'Yes. Turnkey plants for mix plastic and multi-layer plastic waste, from 1.5 to 10 tonnes a day. See the Solutions page.' },
+  { group: 'Recycling plants', q: 'What waste can your plants take?', a: 'Aseptic beverage cartons, multi-layer plastic waste, Poly Al waste, mix plastic waste, collapsible tubes and mill plastic waste.' }
+  // pending: "Can I cut, drill, paint or glue the boards?" — answer from client
 ];
 
 /* ------------------------------------------------------------------ */
 /* Contact                                                             */
 /* ------------------------------------------------------------------ */
 
-export const contact = {
-  eyebrow: 'Contact',
-  title: 'Talk to us.',
-  lead: 'Product enquiries, plant enquiries, waste supply or anything else — send a message and we will get back to you.'
+export const contactPage = {
+  seoTitle: 'Contact Ecolink India | Get a Quote or Talk to Our Team',
+  seoDesc: 'Reach Ecolink India for boards, doors, pallets or recycling plants. Head office in Mumbai, factories in Gujarat and Maharashtra. Email info@ecolinkindia.com.',
+  hero: { headline: 'Tell us what you’re building.', sub: 'A few boards, a truckload of pallets or a whole recycling plant. We’d like to hear about it.' },
+  sent: 'Thanks. We’ve got your enquiry and someone will be in touch soon.',
+  failed: 'Something went wrong. Please try again, or email us at info@ecolinkindia.com.'
 };
 
-export const contactDetails = [
-  { label: 'Phone', value: site.phone, href: 'tel:' + site.phone.replace(/\s/g, ''), pending: true },
-  { label: 'Email', value: site.email, href: 'mailto:' + site.email, pending: true },
-  { label: 'Factory', value: site.address, pending: true },
-  { label: 'Hours', value: 'Mon – Sat, 9:00 – 18:00 IST', pending: true }
-];
-
-export const enquiryTypes = [
-  'Product enquiry',
-  'Price / quotation',
-  'Waste supply',
-  'Technology & Turnkey Solutions',
-  'Partnership',
-  'Other'
-];
-
-/* ------------------------------------------------------------------ */
-/* Comparison table (home)                                             */
-/* ------------------------------------------------------------------ */
-
-export const comparison = {
-  note: 'Indicative comparison based on typical application requirements. Confirm with your Ecolink India representative before specifying.',
-  head: ['Property', 'Ecolink', 'Plywood', 'MDF'],
-  rows: [
-    ['Water resistance', 'Water resistant', 'Swells when wet', 'Swells when wet'],
-    ['Termite & rot', 'Resistant', 'Susceptible', 'Susceptible'],
-    ['Made from waste', 'Yes', 'Timber', 'Timber fibre'],
-    ['Screw holding', 'Good', 'Good', 'Fair'],
-    ['Cut, drill, paint', 'Yes', 'Yes', 'Yes']
-  ]
-};
-
-/* ------------------------------------------------------------------ */
-/* Trusted by / testimonials                                           */
-/* ------------------------------------------------------------------ */
-
-export const trustedBy = [
-  { name: 'Deluxe Recycling', img: 'assets/img/logo-deluxe.png', alt: 'Deluxe Recycling logo' }
-  // pending: client to supply customer / partner logos
-];
-
-/** Only rendered when the client supplies real quotes. */
-export const testimonials = [
-  // pending: client to supply verified customer quotes
-];
-
-export const downloads = [
-  // pending: client to supply brochures and spec sheets
-];
-
-/* ------------------------------------------------------------------ */
-/* Forms                                                               */
-/* ------------------------------------------------------------------ */
+export const enquiryTypes = ['Sales', 'Purchase', 'Technology & Turnkey Solutions', 'General'];
+export const TOPIC_TECH = 'Technology & Turnkey Solutions';
 
 /**
  * Set FORM_ENDPOINT at build time to enable real form submission:

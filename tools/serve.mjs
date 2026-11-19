@@ -1,5 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile, stat } from 'node:fs/promises';
+import { createReadStream } from 'node:fs';
 import { extname, join, normalize, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -16,6 +17,9 @@ const types = {
   '.png': 'image/png',
   '.woff2': 'font/woff2',
   '.json': 'application/json',
+  '.mp4': 'video/mp4',
+  '.pdf': 'application/pdf',
+  '.webp': 'image/webp',
 };
 
 createServer(async (req, res) => {
@@ -32,12 +36,33 @@ createServer(async (req, res) => {
       res.writeHead(302, { Location: pathname + '/' }).end();
       return;
     }
-    const body = await readFile(filePath);
-    res.writeHead(200, {
-      'Content-Type': types[extname(filePath).toLowerCase()] || 'application/octet-stream',
-      'Cache-Control': 'no-cache',
-    });
-    res.end(body);
+    const ext = extname(filePath).toLowerCase();
+    const type = types[ext] || 'application/octet-stream';
+    // HTML revalidates every time; static assets cache for an hour (like a real host)
+    const cache = ext === '.html' ? 'no-cache' : 'public, max-age=3600';
+    const range = req.headers.range && /bytes=(\d*)-(\d*)/.exec(req.headers.range);
+    if (range) {
+      // byte ranges: browsers stream video this way (no stalls, no full re-downloads)
+      const size = info.size;
+      const start = range[1] ? Number(range[1]) : Math.max(0, size - Number(range[2]));
+      const end = range[1] && range[2] ? Math.min(Number(range[2]), size - 1) : size - 1;
+      if (start >= size || start > end) {
+        res.writeHead(416, { 'Content-Range': `bytes */${size}` }).end();
+        return;
+      }
+      res.writeHead(206, {
+        'Content-Type': type,
+        'Content-Range': `bytes ${start}-${end}/${size}`,
+        'Accept-Ranges': 'bytes',
+        'Content-Length': end - start + 1,
+        'Cache-Control': cache,
+      });
+      createReadStream(filePath, { start, end }).pipe(res);
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': type, 'Content-Length': info.size, 'Accept-Ranges': 'bytes', 'Cache-Control': cache });
+    if (req.method === 'HEAD') return res.end();
+    createReadStream(filePath).pipe(res);
   } catch {
     try {
       const body = await readFile(join(root, '404.html'));

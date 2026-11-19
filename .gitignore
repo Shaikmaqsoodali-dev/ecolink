@@ -6,3 +6,6 @@ Desktop.ini
 
 # dependencies (none used today — plain Node, no npm install)
 node_modules/
+
+# full-size image masters (not deployed)
+_source-images/

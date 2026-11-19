@@ -66,10 +66,10 @@ for (const p of pages) {
 }
 
 /* favicon: ink tile + client-supplied logo */
-const logoPng = readFileSync(join(root, 'assets', 'img', 'logo-deluxe.png'));
+const logoPng = readFileSync(join(root, 'assets', 'img', 'deluxe-logo.png'));
 const logoB64 = logoPng.toString('base64');
-const fw = 50;
-const fh = Math.round((fw * 127) / 180);
+const fw = 48;
+const fh = Math.round((fw * 2024) / 2008); // trimmed logo aspect
 writeFileSync(
   join(root, 'assets', 'favicon.svg'),
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">

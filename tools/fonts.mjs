@@ -4,15 +4,16 @@ import { fileURLToPath } from 'node:url';
 
 /* Downloads the latin subsets of the site fonts from Google Fonts and
    writes assets/css/fonts.css + assets/fonts/*.woff2 (self-hosted, OFL).
-   Headings: Mona Sans · Body: Geist  (Manufact design system)          */
+   Display: Archivo (variable width) · Body: Geist · Data: Geist Mono          */
 
 const dir = join(dirname(fileURLToPath(import.meta.url)), '..');
 const UA =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36';
 
 const families = [
-  { file: 'monasans', name: 'Mona Sans', css: 'family=Mona+Sans:wght@400..800' },
+  { file: 'archivo', name: 'Archivo', css: 'family=Archivo:wdth,wght@62..125,100..900' },
   { file: 'geist', name: 'Geist', css: 'family=Geist:wght@400..700' },
+  { file: 'geistmono', name: 'Geist Mono', css: 'family=Geist+Mono:wght@400..600' },
 ];
 
 mkdirSync(join(dir, 'assets', 'fonts'), { recursive: true });
@@ -35,8 +36,9 @@ for (const fam of families) {
     const r = await fetch(src, { headers: { 'User-Agent': UA } });
     if (!r.ok) throw new Error(`font fetch failed ${src}`);
     writeFileSync(join(dir, 'assets', 'fonts', name), Buffer.from(await r.arrayBuffer()));
+    const stretch = /font-stretch:\s*([^;]+);/.exec(block);
     out.push(
-      `@font-face{font-family:'${fam.name}';font-style:normal;font-weight:${wRange};font-display:swap;src:url('../fonts/${name}') format('woff2');unicode-range:${
+      `@font-face{font-family:'${fam.name}';font-style:normal;font-weight:${wRange};${stretch ? `font-stretch:${stretch[1].trim()};` : ''}font-display:swap;src:url('../fonts/${name}') format('woff2');unicode-range:${
         /unicode-range:\s*([^;]+);/.exec(block)[1]
       };}`
     );

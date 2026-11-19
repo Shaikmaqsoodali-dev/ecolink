@@ -1,100 +1,109 @@
 import { page } from '../layout.mjs';
-import { aboutStory, aboutValues, aboutStats, routes, site } from '../data.mjs';
-import { pageHero, sectionHead, statsStrip, img, arrowRight, circleArrow } from '../ui.mjs';
+import { about as A, stats, routes, media, certifications } from '../data.mjs';
+import { esc, img, ic, lines, kicker, pageHero, figures, ctaBand, ytFacade, pad, formatIN } from '../ui.mjs';
 
-export const about = () => {
-  const body = `
-${pageHero({
-  eyebrow: 'About us',
-  title: 'We turn waste into products people buy.',
-  text: aboutStory.title,
-  current: routes.about,
-  label: 'About'
-})}
-
-<section class="section">
-  <div class="container split">
-    <div class="split-copy">
-      <p class="eyebrow reveal">${aboutStory.eyebrow}</p>
-      <h2 class="reveal" data-split>${aboutStory.title}</h2>
-      ${aboutStory.paras.map((p) => `<p class="reveal">${p}</p>`).join('')}
-    </div>
-    <div class="split-media reveal img-reveal">
-      ${img('assets/img/about-plant.jpg', 'Ecolink India recycling plant floor')}
-    </div>
-  </div>
-</section>
-
-${statsStrip(aboutStats, 'section-alt-wrap')}
-
-<section class="section section-alt">
-  <div class="container">
-    ${sectionHead({ eyebrow: 'How we work', title: 'Four things we hold to.' })}
-    <div class="values-grid">
-      ${aboutValues
-        .map(
-          (v, i) => `<article class="value-card reveal" style="--d:${i * 70}ms">
-          <span class="what-no">${v.no}</span>
-          <h3>${v.title}</h3>
-          <p>${v.body}</p>
-        </article>`
-        )
-        .join('')}
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container split split-reverse">
-    <div class="split-media reveal img-reveal">
-      ${img('assets/img/workers-sorting.jpg', 'Workers sorting waste material')}
-    </div>
-    <div class="split-copy">
-      <p class="eyebrow reveal">The loop</p>
-      <h2 class="reveal" data-split>Waste goes in. Boards come out.</h2>
-      <p class="reveal">We buy hard-to-recycle waste — plastic, wood, paper, tyres, cotton — shred and press it into boards, and the offcuts go straight back in as feedstock. Nothing is wasted twice.</p>
-      <a class="btn btn-primary reveal" href="${routes.products}">See our products${arrowRight()}</a>
-    </div>
-  </div>
-</section>
-
-<section class="section section-alt">
-  <div class="container">
-    ${sectionHead({
-      eyebrow: 'Deluxe Recycling (India) Pvt. Ltd.',
-      title: 'The company behind Ecolink.',
-      text: `${site.legalName} has operated in recycling since 2005. Ecolink India is its manufacturing and technology brand.`
-    })}
-    <div class="what-grid">
-      <article class="what-card reveal"><div class="what-card-img">${img('assets/img/about-worker.jpg', 'Worker at a production workstation assembling products')}</div><span class="what-no">01</span><h3>Manufacturing</h3><p>Recycled composite boards, sheets, roofing, doors and pallets.</p>${circleArrow()}</article>
-      <article class="what-card reveal" style="--d:80ms"><div class="what-card-img">${img('assets/img/cardboard-bales.jpg', 'Baled paper and plastic waste collected for recycling')}</div><span class="what-no">02</span><h3>Recycling</h3><p>Buying and processing waste streams others cannot handle.</p>${circleArrow()}</article>
-      <article class="what-card reveal" style="--d:160ms"><div class="what-card-img">${img('assets/img/engineer.jpg', 'Engineer inspecting recycling plant machinery built in-house')}</div><span class="what-no">03</span><h3>Technology</h3><p>Complete recycling plants designed and built in-house.</p>${circleArrow()}</article>
-    </div>
-  </div>
-</section>
-
-<section class="section cta-section">
-  <div class="container">
-    <div class="cta reveal">
-      <div class="cta-copy">
-        <h2 data-split>Work with us.</h2>
-        <p>Product enquiries, waste supply or a plant of your own — start the conversation.</p>
-      </div>
-      <div class="cta-actions">
-        <a class="btn btn-light" href="${routes.contact}#enquiry">Get a Quote${arrowRight()}</a>
-        <a class="btn btn-outline-light" href="${routes.solutions}">Plant solutions</a>
+const story = () => `<section class="sec">
+  <div class="wrap story">
+    <div>
+      ${kicker('01', 'Our story')}
+      <p class="story-q rv-line" style="margin-top:20px">${lines('What happens to a used juice carton?')}</p>
+      <div class="story-imgs rv">
+        <div class="frame">${img('assets/img/b/raw-carton.jpg', 'Bales of used beverage cartons')}</div>
+        <div class="frame">${img('assets/img/film/board-edges.jpg', 'Finished Ecolink boards')}</div>
       </div>
     </div>
+    <div class="prose rv" style="align-self:end">${A.story.paras.map((p) => `<p>${esc(p)}</p>`).join('')}</div>
   </div>
-</section>
-`;
+</section>`;
 
-  return page({
-    title: 'About',
-    description:
-      'Ecolink India is the manufacturing brand of Deluxe Recycling (India) Pvt. Ltd., recycling since 2005 — recycled boards, waste processing and turnkey recycling plants.',
-    current: routes.about,
-    path: '/about',
-    body
-  });
+const numbers = () => `<section class="sec--tight dark dark--ink"><div class="wrap">${figures(stats)}</div></section>`;
+
+const believe = () => `<section class="sec dark">
+  <div class="wrap rrr-grid">
+    <div>
+      ${kicker('02', 'What we believe')}
+      <div class="rrr" style="margin-top:28px" aria-label="${esc(A.believe.title)}">
+        <span class="rrr-w rv">Reduce.</span><span class="rrr-w rv" style="--d:120ms">Reuse.</span><span class="rrr-w rv" style="--d:240ms">Recycle.</span>
+      </div>
+    </div>
+    <div class="rrr-side rv" style="--d:300ms"><p>${esc(A.believe.text)}</p></div>
+  </div>
+</section>`;
+
+const values = () => `<section class="sec">
+  <div class="wrap">
+    <div class="head head--split">
+      <div>${kicker('03', 'How we work')}<h2 class="d2 rv-line" style="margin-top:20px">${lines('Four things we hold ourselves to.')}</h2></div>
+    </div>
+    <div class="values">
+      ${A.values.map((v, i) => `<div class="val rv" style="--d:${i * 90}ms"><span class="val-n">${pad(i + 1)}</span><h3>${esc(v.title)}</h3><p>${esc(v.body)}</p></div>`).join('')}
+    </div>
+  </div>
+</section>`;
+
+const headed = () => `<section class="sec paper-2">
+  <div class="wrap headed">
+    <div class="head head--split" style="margin-bottom:24px">
+      <div>${kicker('04', 'Where we’re headed')}<h2 class="d2 rv-line" style="margin-top:20px">${lines(A.headed.title)}</h2></div>
+      <p class="muted rv">${esc(A.headed.text)}</p>
+    </div>
+    <div class="progress" role="img" aria-label="37,000 of a 1,00,000 tonne yearly target">
+      <div class="progress-track"><span class="progress-now">${formatIN(37000)} t / yr today</span><div class="progress-fill"></div></div>
+      <div class="progress-lab"><span>0</span><span>25,000</span><span>50,000</span><span>75,000</span><span><b>1,00,000 t</b> target</span></div>
+    </div>
+  </div>
+</section>`;
+
+const leader = () => {
+  const L = A.leader;
+  return `<section class="sec dark">
+  <div class="wrap leader">
+    <div class="leader-photo frame rv">${L.img ? img(L.img, L.name) : `<span class="leader-mono" aria-hidden="true">JS</span>`}</div>
+    <div class="rv" style="--d:150ms">
+      ${kicker('05', 'Leadership')}
+      <h2 class="leader-name" style="margin-top:22px">${esc(L.name)}</h2>
+      ${L.role ? `<p class="leader-role">${esc(L.role)}</p>` : ''}
+      ${L.bio ? `<p class="lead muted" style="margin-top:24px">${esc(L.bio)}</p>` : ''}
+    </div>
+  </div>
+</section>`;
 };
+
+const certs = () =>
+  certifications.length
+    ? `<section class="sec--tight"><div class="wrap">${kicker('06', 'Certifications')}<div class="clients" style="margin-top:28px">${certifications
+        .map((c) => `<div class="client">${img(c.img, c.name)}</div>`)
+        .join('')}</div></div></section>`
+    : '';
+
+const press = () => !media.showPress ? '' : `<section class="sec dark dark--ink">
+  <div class="wrap">
+    <div class="head head--split">
+      <div>${kicker('In the media', 'Seen on')}<h2 class="d2 rv-line" style="margin-top:20px">${lines('Cartons into benches, on camera.')}</h2></div>
+      <div class="rv" style="display:grid;gap:20px;justify-items:start"><p class="muted">Our own film shows the plant end to end. The clips beside it are TV and web features on carton recycling.</p>
+      <button class="icon-btn" type="button" data-film-open><span class="ic">${ic.play}</span>Watch our film · ${media.film.duration}</button></div>
+    </div>
+    <div class="press">${media.press.map(ytFacade).join('')}</div>
+    <p class="press-note">Videos load from YouTube only when you press play.</p>
+  </div>
+</section>`;
+
+export const about = () =>
+  page({
+    title: A.seoTitle,
+    description: A.seoDesc,
+    current: routes.about,
+    darkTop: true,
+    body: [
+      pageHero({ k: `Since 1999 · ${27} years`, title: A.hero.headline, sub: A.hero.sub, trail: [{ label: 'About' }], bg: 'assets/img/film/forklift-bales.jpg' }),
+      story(),
+      numbers(),
+      believe(),
+      values(),
+      headed(),
+      leader(),
+      certs(),
+      press(),
+      ctaBand({ title: A.cta.title, text: A.cta.text, btn: 'Talk to us' })
+    ].join('\n')
+  });

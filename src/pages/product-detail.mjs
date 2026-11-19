@@ -1,101 +1,106 @@
 import { page } from '../layout.mjs';
-import { products, productApplications, routes } from '../data.mjs';
-import { img, arrowRight, sectionHead, specList, productCard, ctaBanner, breadcrumb, icon } from '../ui.mjs';
-import { esc } from '../ui.mjs';
+import { allProducts, boards, routes, site, sheet } from '../data.mjs';
+import { esc, img, ic, lines, kicker, crumbs, specs, useList, downloads, ctaBand, waterMeter, contactHref } from '../ui.mjs';
 
-const detail = (p) => {
-  const others = products.filter((o) => o.slug !== p.slug);
-  const apps = productApplications[p.slug] || [];
-
-  const body = `
-<section class="page-hero product-hero">
-  <div class="container">
-    <p class="eyebrow reveal">${esc(p.tag)}</p>
-    <h1 class="display reveal" data-split>${esc(p.name)}</h1>
-    <p class="lead reveal">${esc(p.long)}</p>
-  </div>
-  ${breadcrumb(p.href, p.name)}
-</section>
-
-<section class="section">
-  <div class="container product-detail">
-    <div class="product-detail-media reveal img-reveal">
-      ${img(p.img, p.alt)}
-    </div>
-    <div class="product-detail-info">
-      <h2 class="reveal">Specifications</h2>
-      ${specList(p.specs)}
-      <div class="product-detail-actions reveal">
-        <a class="btn btn-primary" href="${routes.contact}#enquiry" data-topic="${esc(p.name)}">Request a quote${arrowRight()}</a>
-        <a class="btn btn-ghost" href="${routes.contact}#enquiry">Ask a question</a>
+function hero(p) {
+  const isBoard = 'water' in p;
+  return `<section class="prod-hero">
+  <div class="prod-grid">
+    <div class="prod-copy">
+      ${crumbs([{ label: 'Products', href: routes.products }, { label: p.name }])}
+      <div class="prod-tags">
+        ${isBoard ? `<span class="chip">${ic.water} ${esc(p.water)}</span><span class="chip">8 x 4 ft · 4–50 mm</span>` : `<span class="chip">Made from waste</span>`}
+        ${p.sister ? `<span class="chip chip--dark">Sister brand</span>` : ''}
+      </div>
+      <h1 class="d1 rv-line">${lines(p.name)}</h1>
+      <p class="lead rv" style="--d:250ms">${esc(p.sub || p.line)}</p>
+      <div class="btns rv" style="--d:350ms">
+        <a class="btn btn--lime" href="${contactHref('Sales')}">${esc(p.quote)} ${ic.arrow}</a>
+        ${p.sister ? `<a class="btn btn--ghost" href="${site.ecoshaktiUrl}" target="_blank" rel="noopener">Visit ecoshakti.in ${ic.ext}</a>` : `<a class="btn btn--ghost" href="#specs">At a glance</a>`}
       </div>
     </div>
+    <div class="prod-media">${img(p.hero, `${p.name}`, { eager: true })}</div>
   </div>
-</section>
-
-<section class="section section-alt">
-  <div class="container">
-    ${sectionHead({ eyebrow: 'Features', title: `Why ${p.name}.` })}
-    <ul class="feature-list">
-      ${p.features.map((f, i) => `<li class="reveal" style="--d:${i * 70}ms"><span class="feature-tick" aria-hidden="true">${icon('leaf')}</span>${esc(f)}</li>`).join('')}
-    </ul>
-  </div>
-</section>
-
-${
-  apps.length
-    ? `<section class="section">
-  <div class="container">
-    ${sectionHead({ eyebrow: 'Applications', title: `Where ${p.name} is used.` })}
-    <ul class="chip-list">
-      ${apps.map((a, i) => `<li class="chip reveal" style="--d:${i * 50}ms">${esc(a)}</li>`).join('')}
-    </ul>
-  </div>
-</section>`
-    : ''
+</section>`;
 }
 
-<section class="section section-alt">
-  <div class="container">
-    ${sectionHead({ eyebrow: 'Gallery', title: 'Product in focus.' })}
-    <div class="gallery">
-      ${p.gallery.map((g, i) => `<figure class="gallery-item reveal" style="--d:${i * 70}ms">${img(g.src, g.alt)}</figure>`).join('')}
+function glance(p) {
+  const isBoard = 'water' in p;
+  return `<section class="sec" id="specs">
+  <div class="wrap split split--top">
+    <div class="split-copy">
+      ${kicker('01', 'What it is')}
+      <div class="prose rv" style="font-size:clamp(19px,1.6vw,23px);line-height:1.5">${p.what.map((t) => `<p>${esc(t)}</p>`).join('')}</div>
+      ${isBoard ? `<div class="rv" style="max-width:360px">${waterMeter(p.waterLevel, p.water)}</div>` : ''}
+      ${p.note ? `<div class="note rv">${ic.info}<div><strong>Good to know</strong><p>${esc(p.note)}</p></div></div>` : ''}
+    </div>
+    <div class="split-copy rv" style="--d:120ms">
+      ${kicker('02', 'At a glance')}
+      ${specs(p.specs)}
+      ${isBoard ? `<p class="muted" style="font-size:15px">${esc(sheet.custom)}</p>` : ''}
+      ${p.downloads && p.downloads.length ? `<div style="display:grid;gap:12px;margin-top:8px">${kicker(null, 'Downloads')}${downloads(p.downloads)}</div>` : ''}
     </div>
   </div>
-</section>
+</section>`;
+}
 
-<section class="section">
-  <div class="container">
-    ${sectionHead({ eyebrow: 'More products', title: 'Other products from Ecolink.' })}
-    <div class="product-grid">${others.slice(0, 3).map((o, i) => productCard(o, i)).join('')}</div>
+function uses(p) {
+  if (!p.uses.length) return '';
+  return `<section class="sec paper-2">
+  <div class="wrap">
+    <div class="head head--split"><div>${kicker('03', 'Where it works')}<h2 class="d2 rv-line" style="margin-top:20px">${lines('Where it works.')}</h2></div></div>
+    ${useList(p.uses, p.usesImg)}
   </div>
-</section>
+</section>`;
+}
 
-${ctaBanner({
-  title: `Enquire about ${p.name}.`,
-  text: 'Specifications, sizes, pricing and lead times — send us the details of your requirement.',
-  primary: 'Get a Quote',
-  primaryHref: routes.contact,
-  secondary: 'All products',
-  secondaryHref: routes.products,
-  topic: p.name
-})}
-`;
+const sister = (p) =>
+  p.sister
+    ? `<section class="sec sister">
+  <div class="sister-bg" aria-hidden="true">${img('assets/img/film/mlp-pile.jpg', '')}</div>
+  <div class="wrap split">
+    <div class="split-copy">
+      ${kicker('Ecoshakti', 'Visit the Ecoshakti site')}
+      <h2 class="d2 rv-line">${lines('Ecoshakti has its own website.')}</h2>
+      <p class="lead rv" style="color:rgba(255,255,255,.85)">The full range and details live there.</p>
+      <div class="btns rv"><a class="btn btn--lime" href="${site.ecoshaktiUrl}" target="_blank" rel="noopener">Visit ecoshakti.in ${ic.ext}</a></div>
+    </div>
+    <p class="sister-url rv" style="justify-self:end">${site.ecoshaktiUrl.replace('https://', '')} ↗</p>
+  </div>
+</section>`
+    : '';
 
-  return page({
-    title: p.name,
-    description: `${p.name} from Ecolink India — ${p.blurb} Manufactured from recycled waste.`,
+function related(p) {
+  const list = 'water' in p ? boards.filter((b) => b.slug !== p.slug) : allProducts.filter((x) => !('water' in x) && x.slug !== p.slug);
+  return `<section class="sec--tight" style="padding-top:clamp(56px,6vw,90px)">
+  <div class="wrap">
+    <div style="margin-bottom:24px">${kicker(null, 'Related')}</div>
+    <div class="related">
+      ${list
+        .map(
+          (r) => `<a class="rel rv" href="${r.href}">${img(r.img, '')}<div><strong>${esc(r.name)}</strong><span>${esc(r.water || r.line)}</span></div>${ic.arrow}</a>`
+        )
+        .join('')}
+    </div>
+  </div>
+</section>`;
+}
+
+const render = (p) => () =>
+  page({
+    title: p.seoTitle,
+    description: p.seoDesc,
     current: p.href,
-    path: p.href,
-    body,
+    ogImage: p.hero,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'Product',
       name: p.name,
-      description: p.blurb,
-      brand: { '@type': 'Brand', name: 'Ecolink India' }
-    }
+      description: p.seoDesc,
+      brand: { '@type': 'Brand', name: p.sister ? 'Ecoshakti' : 'Ecolink' },
+      manufacturer: { '@type': 'Organization', name: site.legalName }
+    },
+    body: [hero(p), glance(p), uses(p), sister(p), related(p), ctaBand({ title: p.cta, btn: p.quote, href: contactHref('Sales') })].join('\n')
   });
-};
 
-export const productPages = Object.fromEntries(products.map((p) => [p.slug, () => detail(p)]));
+export const productPages = Object.fromEntries(allProducts.map((p) => [p.slug, render(p)]));
